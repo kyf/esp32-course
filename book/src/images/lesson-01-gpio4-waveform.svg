@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 230" role="img" aria-label="GPIO4 0到5秒内每500毫秒翻转一次的方波">
+<rect width="960" height="230" rx="10" fill="#0d1721"/>
+<text x="25" y="31" font-family="Arial,sans-serif" font-size="17" fill="#d4e8e9">GPIO4 · 5s simulation · 1Hz · 50% duty</text>
+<g stroke="#42515d" stroke-dasharray="3 5">
+<path d="M65 55V184 M237 55V184 M409 55V184 M581 55V184 M753 55V184 M925 55V184"/>
+</g>
+<g font-family="Arial,sans-serif" font-size="14" fill="#c3d4db">
+<text x="46" y="80">1</text><text x="46" y="158">0</text>
+<text x="65" y="211" text-anchor="middle">0s</text><text x="237" y="211" text-anchor="middle">1s</text><text x="409" y="211" text-anchor="middle">2s</text><text x="581" y="211" text-anchor="middle">3s</text><text x="753" y="211" text-anchor="middle">4s</text><text x="925" y="211" text-anchor="middle">5s</text>
+</g>
+<path d="M65 146 L65.409 146 L65.409 70 L151.409 70 L151.409 146 L237.409 146 L237.409 70 L323.409 70 L323.409 146 L409.409 146 L409.409 70 L495.409 70 L495.409 146 L581.409 146 L581.409 70 L667.409 70 L667.409 146 L753.409 146 L753.409 70 L839.409 70 L839.409 146 L925 146" fill="none" stroke="#30df87" stroke-width="3" stroke-linejoin="round"/>
+<text x="70" y="173" font-family="Arial,sans-serif" font-size="12" fill="#a7b8c0">first transition ≈ 2.377ms</text>
+</svg>
