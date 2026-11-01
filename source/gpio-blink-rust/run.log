@@ -1,0 +1,13 @@
+[emu] ROM loaded from /Users/alugen/work/my-project/esp32-lab/emulator/esp32sim/--no-linux/esp32s3_rev0_rom.elf
+[emu] app boot: entry 0x40378620 Reset
+
+[emu] stop: Halted — core0 1199999998 + core1 0 insns in 6.0s wall = 201.5 Minsn/s; emulated 5.000s (1200000000 cycles); 3 exceptions, 0 interrupts
+[vcd] wrote 10 events to gpio.vcd
+[irq] per core, cpu-int: count (peripheral sources mapped to it)
+
+[emu] i2s frames out: 0 (i2s0 @ 44100 Hz) 0 (i2s1 @ 44100 Hz)
+[emu] blocks: 848 built (0 cache flushes) core0, 0 (0) core1; jit: 848 compiled, 1021 KB code
+core0: pc=42011577 main+0x108f  ps=00060020 wb=1 ws=0002 sar=4 lcount=0 exccause=0 excvaddr=00000000 epc1=42012a37 intenable=00c80402 interrupt=00000000 ccount=1199999998 insns=1199999998
+a0 =4037867d a1 =3fcdb6a0 a2 =00000005 a3 =00000010 a4 =00000000 a5 =0044b369 a6 =00000000 a7 =0000003f 
+a8 =60023040 a9 =20000000 a10=04c4b3fb a11=00000000 a12=00000000 a13=0007a120 a14=00000006 a15=00000001 
+
