@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ESP32-S3 GPIO4 LED · VCD 回放</title>
+<style>
+body{font:16px system-ui;background:#101a24;color:#edf4f6;margin:0;padding:2rem}
+main{max-width:720px;margin:auto}section{background:#1b2b39;border-radius:16px;padding:24px}
+.lamp{width:130px;height:130px;border-radius:50%;margin:25px auto;border:4px solid #587064;background:#26352e}
+.lamp.on{background:#20e97d;box-shadow:0 0 30px #20e97d,0 0 70px #18954f}
+#state,#clock{text-align:center}#state{font-weight:bold;font-size:22px}
+#seek{width:100%}button,input,select{font:inherit}button{margin:8px 5px;padding:7px 13px}
+small{color:#b9cbd2}#error{color:#ffadad}
+</style></head><body><main><h1>GPIO4 虚拟 LED</h1>
+<p>浏览器本地读取 esp32sim 的 VCD，按时间戳回放 GPIO4 输出。<b>本工具不是实时模拟器板卡。</b></p>
+<section><input id="file" type="file" accept=".vcd,text/plain"><p id="info">请选择 gpio.vcd</p>
+<div id="lamp" class="lamp"></div><div id="state">未知</div><p id="clock">0.000s</p>
+<input id="seek" type="range" min="0" max="1" step="0.001" value="0" disabled>
+<p><button id="play" disabled>播放</button><button id="reset" disabled>重置</button>
+<label>倍速 <select id="speed"><option>0.5</option><option selected>1</option><option>2</option><option>5</option></select></label></p>
+<small>假定 LED 高电平点亮；真实电路若为低电平点亮，亮灭相反。</small><p id="error"></p>
+</section></main>
+<script>
+const E=id=>document.getElementById(id);let ev=[],dur=0,t=0,last=0,run=false,raf=0;
+function stop(){run=false;cancelAnimationFrame(raf);E('play').textContent='播放'}
+function level(t){let lo=0,hi=ev.length;while(lo<hi){let m=(lo+hi)>>1;if(ev[m][0]<=t)lo=m+1;else hi=m}return lo?ev[lo-1][1]:'x'}
+function draw(){let v=level(t);E('lamp').classList.toggle('on',v==='1');E('state').textContent=v==='1'?'GPIO4 高 · LED 亮':v==='0'?'GPIO4 低 · LED 灭':'电平未知';E('clock').textContent=t.toFixed(3)+'s / '+dur.toFixed(3)+'s';E('seek').value=t}
+function tick(now){if(!run)return;if(last)t+=Math.min((now-last)/1000,.25)*Number(E('speed').value);last=now;if(t>=dur){t=dur;stop()}draw();if(run)raf=requestAnimationFrame(tick)}
+E('play').onclick=()=>{if(run){stop();return}if(t>=dur)t=0;run=true;last=0;E('play').textContent='暂停';raf=requestAnimationFrame(tick)};
+E('reset').onclick=()=>{stop();t=0;draw()};
+E('seek').oninput=e=>{stop();t=Number(e.target.value);draw()};
+E('file').onchange=async e=>{stop();E('error').textContent='';try{
+const file=e.target.files[0];if(!file)return;const data=await file.text();
+const tm=data.match(/\$timescale\s+(\d+)\s*(s|ms|us|ns|ps|fs)\s*\$end/i);if(!tm)throw Error('未找到 timescale');
+const scales={s:1,ms:1e-3,us:1e-6,ns:1e-9,ps:1e-12,fs:1e-15},factor=Number(tm[1])*scales[tm[2].toLowerCase()];
+const sig=data.match(/\$var\s+\w+\s+1\s+(\S+)\s+gpio4\s+\$end/i);if(!sig)throw Error('未找到 gpio4');
+let cur=0,max=0,events=[];for(const line of data.split(/\r?\n/)){const s=line.trim();if(s[0]==='#'){cur=Number(s.slice(1))*factor;max=Math.max(max,cur)}else{const m=s.match(/^([01xXzZ])(\S+)$/);if(m&&m[2]===sig[1])events.push([cur,m[1].toLowerCase()])}}
+if(!events.length||max<=0)throw Error('缺少有效 gpio4 时间事件');
+ev=events;dur=max;t=0;E('seek').max=dur;E('seek').disabled=false;E('play').disabled=false;E('reset').disabled=false;
+E('info').textContent=file.name+' · '+ev.length+' 个事件 · '+dur.toFixed(3)+'s';draw();
+}catch(err){ev=[];E('error').textContent=err.message;E('play').disabled=true;E('reset').disabled=true;E('seek').disabled=true}};
+</script></body></html>
