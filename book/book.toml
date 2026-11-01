@@ -1,0 +1,9 @@
+[book]
+title = "ESP32-S3 Rust 嵌入式开发实战"
+authors = ["esp32-course contributors"]
+language = "zh-CN"
+src = "src"
+description = "macOS + Rust + esp-hal + no_std + esp32sim 课程"
+
+[build]
+build-dir = "dist"
