@@ -12,6 +12,8 @@
 | WaveTrace 显示异常或空白 | 检查 `$timescale`、时间轴缩放、实际 VCD 事件 | 本次 WaveTrace 未正确呈现原始文件；Surfer 直接打开同一 VCD 后显示正常，具体 WaveTrace 原因未确定 |
 | Surfer 时间轴显示很大的 `ps` 数字 | 查看 VCD 中 `$timescale 1ps $end` | `1000000000000ps=1s`；缩放到 0～5s 即可看到完整方波 |
 | VCD 无法查看 | 检查 `$timescale` 和 `$var` | 手工核对时间戳，或使用 Surfer 等查看器交叉验证 |
+| `--board none` 看不到 LED 动画 | 检查板卡模型和 GPIO VCD | `none` 不连接外设；可用 `tools/led-vcd-viewer.html` 回放，不等于实时板卡 LED |
+| VCD、UART、模拟器日志混淆 | 检查来源：引脚事件 / 固件主动串口输出 / `[emu]` 运行状态 | 不要把 GPIO VCD 当作 `espflash monitor` 串口内容 |
 | `run.sh` 在别人机器失败 | `cat source/gpio-blink-rust/run.sh` | 当前脚本含个人绝对路径，改用变量化命令 |
 
 课程默认保留可复现命令、版本、最小日志和验收波形。技术推测与经实测验证的结论应明确分开。
