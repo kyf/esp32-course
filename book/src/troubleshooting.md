@@ -9,7 +9,9 @@
 | `mkdir: illegal option -- -` | `sh -x tools/fetch-rom-elfs.sh roms` | 核实实际传参，不预判根因 |
 | `_WindowOverflow4` | 反汇编异常入口、检查停止选项 | 窗口溢出可能可恢复；不要过早停机 |
 | `vcd` 0 个事件 | 检查 CPU 是否进入业务循环 | 先解决启动问题 |
-| VCD 无法查看 | 检查 `$timescale` 和 `$var` | 手工核对时间戳，或使用 VCD 查看扩展 |
+| WaveTrace 显示异常或空白 | 检查 `$timescale`、时间轴缩放、实际 VCD 事件 | 本次 WaveTrace 未正确呈现原始文件；Surfer 直接打开同一 VCD 后显示正常，具体 WaveTrace 原因未确定 |
+| Surfer 时间轴显示很大的 `ps` 数字 | 查看 VCD 中 `$timescale 1ps $end` | `1000000000000ps=1s`；缩放到 0～5s 即可看到完整方波 |
+| VCD 无法查看 | 检查 `$timescale` 和 `$var` | 手工核对时间戳，或使用 Surfer 等查看器交叉验证 |
 | `run.sh` 在别人机器失败 | `cat source/gpio-blink-rust/run.sh` | 当前脚本含个人绝对路径，改用变量化命令 |
 
 课程默认保留可复现命令、版本、最小日志和验收波形。技术推测与经实测验证的结论应明确分开。
