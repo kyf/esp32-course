@@ -1,0 +1,9 @@
+# mdBook generated site
+/book/dist/
+/book/book/
+
+# Rust artifacts across lesson projects
+**/target/
+
+# macOS
+.DS_Store

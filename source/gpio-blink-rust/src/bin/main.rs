@@ -8,9 +8,10 @@
 #![deny(clippy::large_stack_frames)]
 
 use esp_hal::clock::CpuClock;
-use esp_hal::main;
-use esp_hal::time::{Duration, Instant};
+use esp_hal::delay::Delay;
 use esp_hal::gpio::{Level, Output, OutputConfig};
+use esp_hal::main;
+use esp_hal::time::Duration;
 
 #[panic_handler]
 fn panic(_: &core::panic::PanicInfo) -> ! {
@@ -40,28 +41,25 @@ fn main() -> ! {
     }
     */
 
+    let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
 
+    let peripherals = esp_hal::init(config);
 
-    let config = esp_hal::Config::default()
-            .with_cpu_clock(CpuClock::max());
+    // 将 GPIO4 配置成数字输出，初始为低电平
+    let mut led = Output::new(peripherals.GPIO4, Level::Low, OutputConfig::default());
 
-        let peripherals = esp_hal::init(config);
+    loop {
+        // 翻转 GPIO4 的电平
+        led.toggle();
 
-        // 将 GPIO4 配置成数字输出，初始为低电平
-        let mut led = Output::new(
-            peripherals.GPIO4,
-            Level::Low,
-            OutputConfig::default(),
-        );
+        let d = Delay::new();
+        d.delay(Duration::from_millis(500));
+        /*
+        // 等待 500 毫秒
+        let delay_start = Instant::now();
 
-        loop {
-            // 翻转 GPIO4 的电平
-            led.toggle();
-
-            // 等待 500 毫秒
-            let delay_start = Instant::now();
-
-            while delay_start.elapsed() < Duration::from_millis(500) {}
-        }
+        while delay_start.elapsed() < Duration::from_millis(500) {}
+        */
+    }
     // for inspiration have a look at the examples at https://github.com/esp-rs/esp-hal/tree/esp-hal-v1.2.2/examples
 }
